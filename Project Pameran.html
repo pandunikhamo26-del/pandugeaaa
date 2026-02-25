@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fisioter🔥</title>
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --primary: #4F46E5;
+            --secondary: #7C3AED;
+            --accent: #06B6D4;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --white: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --sidebar-width: 260px;
+            --sidebar-width-collapsed: 80px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #6B8DD6, #8E37D7);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: var(--text-dark);
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-right: 1px solid var(--glass-border);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .sidebar.collapsed {
+            width: var(--sidebar-width-collapsed);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo i {
+            color: #FFD700;
+        }
+
+        .nav-menu {
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: var(--transition);
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .nav-link i {
+            width: 24px;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            text-align: center;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 0;
+            background: var(--white);
+            border-radius: 0 4px 4px 0;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::before, .nav-link.active::before {
+            height: 60%;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .sidebar.collapsed .nav-link span {
+            display: none;
+        }
+        
+        .sidebar.collapsed .logo span {
+            display: none;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: -15px;
+            background: var(--white);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .toggle-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding: 40px;
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        .sidebar.collapsed + .main-content {
+            margin-left: var(--sidebar-width-collapsed);
+        }
+
+        /* Sections */
+        section {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        section.active-section {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--white);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        p {
+            line-height: 1.8;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+
+        /* Cards Glassmorphism */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(255, 255, 255, 0.35);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+
+        .card-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .card-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .card-list li:last-child {
+            border-bottom: none;
+        }
+
+        .card-list li i {
+            color: var(--primary);
+            margin-top: 4px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 40px;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            color: var(--text-dark);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 35px;
+            background: var(--white);
+            color: var(--primary);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--white);
+        }
+
+        /* Form */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.7);
+            padding: 40px;
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.9);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(79, 70, 229, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .info-box i {
+            color: var(--primary);
+            margin-right: 10px;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #EF4444;
+            padding: 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .warning-box i {
+            color: #EF4444;
+            margin-right: 10px;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 25px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 16px;
+            transition: var(--transition);
+        }
+
+        .feature-item:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-5px);
+        }
+
+        .feature-item i {
+            font-size: 2.5rem;
+            color: var(--white);
+            margin-bottom: 15px;
+        }
+
+        .feature-item h4 {
+            color: var(--white);
+            font-size: 1rem;
+        }
+
+        /* Stats */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                flex-wrap: wrap;
+                padding: 15px;
+                border-right: none;
+                border-bottom: 1px solid var(--glass-border);
+            }
+
+            .sidebar .logo {
+                margin-bottom: 0;
+                flex: 1;
+            }
+
+            .sidebar .toggle-btn {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-left: 10px;
+            }
+
+            .nav-menu {
+                display: none;
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-top: 15px;
+            }
+
+            .sidebar.active .nav-menu {
+                display: flex;
+            }
+
+            .nav-item {
+                flex: 1 1 calc(50% - 5px);
+                margin-bottom: 0;
+            }
+
+            .nav-link {
+                justify-content: center;
+                padding: 12px;
+                background: rgba(255,255,255,0.1);
+            }
+
+            .nav-link i {
+                margin-right: 0;
+                margin-bottom: 5px;
+            }
+
+            .nav-link span {
+                display: block;
+                font-size: 0.85rem;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+                padding-top: 140px;
+            }
+
+            .hero {
+                padding: 40px 20px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .stats-container {
+                gap: 20px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-item {
+                flex: 1 1 100%;
+            }
+
+            .contact-form {
+                padding: 25px;
+            }
+
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            background: var(--white);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+
+       
+    
+
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+<nav class="sidebar" id="sidebar">
+    <div class="logo">
+        <i class="fas fa-heartbeat"></i>
+        <span>Pulihbersama</span>
+    </div>
+    <button class="toggle-btn" onclick="toggleSidebar()">
+        <i class="fas fa-chevron-left" id="toggleIcon"></i>
+    </button>
+    
+    <ul class="nav-menu">
+        <!-- Beranda -->
+        <li class="nav-item">
+            <a href="#" class="nav-link active" data-page="beranda">
+                <i class="fas fa-home"></i>
+                <span>Beranda</span>
+            </a>
+        </li>
+
+        <!-- Anatomi Fisiologi -->
+        <li class="nav-item">
+            <a href="#" class="nav-link" data-page="Anfis">
+                <i class="fas fa-brain"></i>
+                <span>Anatomi Fisiologi</span>
+            </a>
+        </li>
+
+        <!-- Penyebab & Dampak -->
+        <li class="nav-item">
+            <a href="#" class="nav-link" data-page="Penyebab & Dampak">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Penyebab & Dampak</span>
+            </a>
+        </li>
+
+        <!-- Patofisiologi -->
+        <li class="nav-item">
+            <a href="#" class="nav-link" data-page="Patofisiologi">
+                <i class="fas fa-heart-pulse"></i>
+                <span>Patofisiologi</span>
+            </a>
+        </li>
+
+        <!-- Kendali Resiko -->
+        <li class="nav-item">
+            <a href="#" class="nav-link" data-page="Kendali Resiko">
+                <i class="fas fa-dumbbell"></i>
+                <span>Kendali Resiko</span>
+            </a>
+        </li>
+
+        <!-- Edukasi -->
+        <li class="nav-item">
+            <a href="#" class="nav-link" data-page="Edukasi">
+                <i class="fas fa-apple-whole"></i>
+                <span>Edukasi</span>
+            </a>
+        </li>
+
+        <!-- Team -->
+        <li class="nav-item">
+            <a href="#" class="nav-link" data-page="Team">
+                <i class="fas fa-users"></i>
+                <span>Team</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <!-- BERANDA -->
+        <section id="beranda" class="active-section">
+            <div class="hero">
+                <h1>Apa itu hipertensi?</h1>
+                <div class="glass-card">
+                    <p>Hipertensi adalah kondisi ketika tekanan darah berada di atas normal (≥140/90 mmHg) secara terus-menerus. Penyakit ini sering tidak menimbulkan gejala, tetapi dapat menyebabkan komplikasi serius seperti penyakit jantung, stroke, dan gangguan ginjal. Karena itu, penting untuk rutin memeriksa tekanan darah dan menjaga pola hidup sehat.</p>
+                  </div>
+                  <div class="video-wrapper"> 
+                    <video autoplay muted loop playsinline width="500" height="450"> 
+                        <source src="Hipertensi.mp4"  type="video/mp4"> 
+                    </video>
+                </div>
+
+                <div> <button class="btn btn-primary" onclick="navigateTo('Anfis')">
+                    
+                    Pelajari Lebih Lanjut
+                </button></div>
+                
+            
+            </div>
+        </section>
+
+        <!-- Anatomi Fisiologi -->
+        <section id="Anfis">
+            <div class="section-header">
+                <h1>Anatomi Fisiologi</h1>
+                <p class="subtitle">Tekanan darah tinggi yang sering tidak bergejala</p>
+            </div>
+
+            <div class="card-grid">
+                <div class="glass-card">
+                    <h2>Anatomi</h2>
+                    <ul class="card-list">
+                   <img src="Jantung naflahhh.png" width="450" height="550">
+                </div>
+
+                <div class="glass-card">
+                    <h2>Fisiologi</h2>
+                    <ul class="card-list">
+                        <li><i class="fas fa-check"></i> Sirkulasi Sistemik</li>
+                      <p>Sirkulasi sistemik merupakan sirkulasi darah yang mengaliri seluruh tubuh. Sirkulasi ini berlangsung ketika darah bersih yang mengandung oksigen mengisi serambi kiri jantung melalui vena pulmonalis, setelah melepaskan karbon dioksida di paru-paru.</p>
+                       
+                            <li><i class="fas fa-check"></i>Sirkulasi Pulmonal</li>
+                            <p>Sirkulasi darah dari jantung menuju paru-paru dan sebaliknya. Sirkulasi ini berlangsung saat darah yang mengandung karbon dioksida dari sisa metabolisme tubuh kembali ke jantung melalui pembuluh vena besar (vena cava).</p>
+                        <li><i class="fas fa-check"></i> 3.	Sirkulasi Coroner</li>
+                        <p>Sama seperti organ tubuh lain, jantung juga membutuhkan asupan oksigen dan nutrisi agar dapat menjalankan fungsinya dengan baik. Darah yang membawa nutrisi dan oksigen ke otot-otot jantung akan dialirkan melalui pembuluh arteri koroner.</p>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+         <!-- Penyebab & Dampak -->
+         <section id="Penyebab & Dampak">
+            <div class="section-header">
+                <h1>Penyebab & Dampak</h1>
+                <p class="subtitle">Menjaga tekanan darah cegah hipertensi</p>
+            </div>
+
+            <div class="card-grid">
+                <div class="glass-card">
+                    <h2>Penyebab</h2>
+                    <ul class="card-list">
+                        <li><i class="fas fa-check"></i> Konsumsi garam berlebih</li>
+                        <li><i class="fas fa-check"></i> Kurang aktivitas fisik</li>
+                        <li><i class="fas fa-check"></i> Obesitas</li>
+                        <li><i class="fas fa-check"></i> Stres berlebihan</li>
+                        <div class="glass-card">
+                            <p>Hipertensi merupakan penyakit yang terjadi akibat kombinasi berbagai faktor, seperti pola makan tinggi garam dan lemak, kurangnya aktivitas fisik, stres yang berlangsung lama, kelebihan berat badan, serta kebiasaan merokok dan konsumsi alkohol. Selain itu, faktor keturunan dan pertambahan usia juga dapat meningkatkan risiko seseorang mengalami tekanan darah tinggi.</p>
+                        
+                    </ul>
+                </div>
+
+                <div class="glass-card">
+                    <h2>Dampak</h2>
+                    <ul class="card-list">
+                        <li><i class="fas fa-check"></i> Penyakit jantung</li>
+                        <li><i class="fas fa-check"></i> Stroke</li>
+                        <li><i class="fas fa-check"></i> Gangguan ginjal</li>
+                        <li><i class="fas fa-check"></i> Demensia Vaskular</li>
+                        <div class="glass-card">
+                            <p>Hipertensi menyebabkan kerusakan sistem peredaran darah karena tekanan tinggi yang terus-menerus membuat pembuluh darah menebal dan menyempit, sehingga aliran darah ke organ vital terganggu. Kondisi ini dapat menimbulkan komplikasi serius seperti stroke, penyakit jantung, dan gagal jantung akibat menurunnya kemampuan jantung memompa darah.
+                            </p>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Patofisiologi -->
+        <section id="Patofisiologi">
+            <div class="section-header">
+                <h1>Patofisiologi Penyakit Hipertensi</h1>
+              
+            </div>
+
+            <div class="glass-card">
+             <img src="patofisiologi.png" width="900" height="450">
+            </div>
+        </section>
+
+        <!-- Kendali Resiko -->
+        <section id="Kendali Resiko">
+            <div class="section-header">
+                <h1>Pencegahan</h1>
+                <p class="subtitle">Cegah Hipertensi</p>
+            </div>
+
+            <div class="glass-card">
+              
+                <p>Seseorang dikatakan mengalami hipertensi ketika hasil pengukuran tekanan darah berulang menunjukkan nilai tinggi.</p>
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                   
+                    Pencegahan hipertensi dilakukan melalui penerapan pola hidup sehat seperti diet rendah garam, tinggi serat dan rendah lemak, berhenti merokok, membatasi konsumsi alkohol, serta melakukan aktivitas fisik teratur. Selain itu, pencegahan juga dilakukan melalui terapi farmakologis berupa penggunaan obat antihipertensi sesuai anjuran tenaga kesehatan dan terapi nonfarmakologis berupa pengendalian berat badan, manajemen stres, pola tidur yang cukup, serta pemantauan tekanan darah secara rutin.
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h1>Monitoring</h1>
+                <p class="subtitle">Pantau Secara Berkala</p>
+            </div>
+
+            <div class="glass-card">
+                <p>Monitoring hipertensi secara rutin penting untuk mencegah komplikasi dan menjaga tekanan darah tetap terkontrol.</p>
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    Monitoring pasien hipertensi dilakukan dengan pemantauan tanda vital terutama tekanan darah, penilaian respons kardiovaskular dan kapasitas fungsional, deteksi dini tanda gagal jantung dan gejala stroke, evaluasi sirkulasi perifer, serta pemberian edukasi self-monitoring kepada pasien agar patuh terapi dan menerapkan gaya hidup sehat, dengan tujuan menilai efektivitas pengobatan, mencegah komplikasi, dan melindungi organ target.
+ 
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Edukasi -->
+        <section id="Edukasi">
+            <div class="section-header">
+                <h1>Ayo Biasakan!</h1>
+            </div>
+            <div class="glass-card">
+            <p>Untuk mencegah hipertensi, biasakan menjalani hidup yang lebih sehat mulai dari hal sederhana, seperti mengurangi makanan asin dan berlemak, lebih sering makan buah dan sayur, rutin bergerak atau olahraga ringan, menjaga berat badan, berhenti merokok, mengurangi alkohol, mengelola stres, cukup istirahat, serta rajin mengecek tekanan darah agar kesehatan tetap terjaga.</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <img src="sifa.jpeg" width="300" height="200">
+                    <h4>Aktivitas Fisik Yang Rutin</h4>
+                </div>
+                <div class="feature-item">
+                    <img src="makanan-sehat.png" width="300" height="200">
+                    <h4>manajemen berat badan dengan menjaga pola makan</h4>
+                </div>
+                <div class="feature-item">
+                    <img src="rokok.jpeg" width="300" height="200">
+                    <h4>Hindari faktor risiko</h4>
+                </div>
+            </div>
+        </section>
+
+          <!-- Team -->
+           
+           
+            <section id="Team">
+                <div class="section-header">
+                    <h1>Team</h1>
+                </div>
+            
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <img src="22.jpeg" width="450" height="350" alt="Team Member 1">
+                    </div>
+                    <div class="feature-item">
+                        <img src="44.jpeg" width="450" height="350" alt="Team Member 2">
+                    </div>
+                </div>
+            
+                <div class="glass-card" style="margin-top: 30px;">
+                    <h2>Satu Tim, Banyak Ide</h2>
+                    <ol>
+                        <li>Naflah Syahira Putri Rosani (Jakarta)</li>
+                        <li>Alma Trimaulia (Bekasi)</li>
+                        <li>Shifa Khaira (Lampung)</li>
+                        <li>Pandu Nikhamo Gea (Nias)</li>
+                        <li>Sifa Nurfatimah (Bekasi)</li>
+                        <li>Kenny Krystyan (Jakarta)</li>
+                        <li>Muhamad Alif Rizki (Bekasi)</li>
+                        <li>Ranny Laura Dewi Megatadoe (Jakarta)</li>
+                        <li>Aurelia Syafitri (Jakarta)</li>
+                        <li>Muhammad Fahmi (Bogor)</li>
+                        <li>Davino Alfianto (Jakarta)</li>
+                        <li>Liani Putri Cahaya (Jakarta)</li>
+                        <li>Andra Fakhri Ramadhan (Jakarta)</li>
+                        <li>Oviana Aro (Flores)</li>
+                    </ol>
+                </div>
+            </section>
+            </div>
+         
+                 
+                     
+             
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        const navLinks = document.querySelectorAll(".nav-link");
+        const sections = document.querySelectorAll("section");
+
+        navLinks.forEach(link => {
+            link.addEventListener("click", function(e) {
+                e.preventDefault();
+                const page = this.getAttribute("data-page");
+                navigateTo(page);
+
+                navLinks.forEach(l => l.classList.remove("active"));
+                this.classList.add("active");
+            });
+        });
+
+        function navigateTo(pageId) {
+            sections.forEach(section => {
+                section.classList.remove("active-section");
+            });
+
+            document.getElementById(pageId).classList.add("active-section");
+        }
+
+        function toggleSidebar() {
+            document.getElementById("sidebar").classList.toggle("collapsed");
+        }
+
+        function submitForm(event) {
+            event.preventDefault();
+            alert("Pesan berhasil dikirim! Terima kasih sudah menghubungi kami 😊");
+            document.querySelector(".contact-form").reset();
+        }
+    </script>
+
+</body>
+</html>
